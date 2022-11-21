@@ -6,6 +6,7 @@ import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 
 interface ApiService {
@@ -17,5 +18,8 @@ interface ApiService {
 
     @POST("/Offres")
     suspend fun createOffre(@Body offre: offre)
+
+    @PUT("/Offres/{id}")
+    suspend fun updateOffre(@Path("id") id: String,@Body offre: offre)
 
 }

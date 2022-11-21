@@ -20,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var add : FloatingActionButton
     lateinit var delete: Button
     lateinit var float_delete: FloatingActionButton
+    lateinit var float_edit : FloatingActionButton
     var index : Int = -1
     lateinit var add_layout : ConstraintLayout
 
@@ -35,66 +36,74 @@ class MainActivity : AppCompatActivity() {
                      list = response.body()
                     recycler = findViewById(R.id.recycleView)
                     float_delete = findViewById(R.id.delete)
+                    float_edit = findViewById(R.id.put)
+                    float_edit.setOnClickListener {
+                        println("button edit")
+                    }
                     //create adapter
                     adapter = CustomAdapter(list)
 
                     //create layoutManager of recycler
                     val layoutRecycler = LinearLayoutManager(applicationContext)
 
-                    //add layoutManager to recycle
-                   /* recycler.layoutManager=layoutRecycler
-                    recycler.adapter = adapter*/
+                   /* adapter.setOnItemClickListener(object : CustomAdapter.onItemClickListener{
+
+
+                        override fun onItemClick(position: Int) {
+                            println("item selected")
+
+                            float_edit.setOnClickListener {
+                                //println("dkhalna lel methode float -delete ")
+                                intent = Intent(applicationContext, MainActivity2::class.java)
+                                intent.putExtra("id",list?.get(index).toString())
+
+                                startActivity(intent)
+
+
+
+                            }
+
+
+                        }
+
+                    })*/
                     adapter.setOnItemClickListener(object : CustomAdapter.onItemClickListener{
 
 
                         override fun onItemClick(position: Int) {
-                            /*index = position
-                            float_delete.setOnClickListener {
-                                list?.remove(list!!.get(index))
-                                adapter.notifyItemRemoved(position)
-                                adapter.notifyItemRangeChanged(position, list!!.size)
-                                adapter.notifyDataSetChanged()
 
-                            }*/
-                           // var elem = this.getItemId(position);
-                          /*  if (item != null) {
-                                println(item.code.toString())
-                            }*/
+                            float_edit.setOnClickListener {
+
+                                intent = Intent(applicationContext, MainActivity2::class.java)
+                                intent.putExtra("id",list?.get(position)?.code.toString())
+                                intent.putExtra("intitule",list?.get(position)?.intitulé.toString())
+                                intent.putExtra("société",list?.get(position)?.société.toString())
+                                intent.putExtra("specialité",list?.get(position)?.specialité.toString())
+                                intent.putExtra("pays",list?.get(position)?.pays.toString())
+                                intent.putExtra("nbpostes",list?.get(position)?.nbpostes.toString())
+
+
+                                startActivity(intent)
+
+
+
+                            }
+
                             float_delete.setOnClickListener {
-                                println("dkhalna lel methode float -delete ")
+
                                 val scope = CoroutineScope(Dispatchers.Main)
                                 scope.launch {
                                     try {
 
                                         println("hellooo")
                                         ApiClient.apiService.deleteOffre(list?.get(position)?.code.toString())
-
-
-                                        var listUp = ApiClient.apiService.getOffres()
-                                        println(listUp.body())
-                                        list = listUp.body()
-                                        println(list)
+                                       println(list)
                                         println(position)
                                         index = position
-
-                                       // list?.remove(list!!.get(index))
-                                       // adapter.notifyItemRemoved(position)
-                                       // adapter.notifyItemRangeChanged(position, list!!.size)
-                                        adapter.notifyDataSetChanged()
-                                       // adapter = CustomAdapter(list)
-                                     /*  adapter.notifyItemRemoved(position)
-                                         list?.let { it1 -> adapter.notifyItemRangeChanged(position, it1.size) }
-                                         adapter.notifyDataSetChanged()*/
-                                        /*adapter.notifyItemRemoved(position)
+                                        list?.remove(list!!.get(index))
+                                        adapter.notifyItemRemoved(position)
                                         adapter.notifyItemRangeChanged(position, list!!.size)
-                                        adapter.notifyDataSetChanged()*/
-                                        /* data?.remove( data?.get(position))
-                                    notifyItemRemoved(position)
-                                    data?.let { it1 -> notifyItemRangeChanged(position, it1.size) }
-                                    notifyDataSetChanged()*/
-
-
-
+                                        adapter.notifyDataSetChanged()
 
                                     }
                                     catch (e: Exception) {
@@ -104,30 +113,13 @@ class MainActivity : AppCompatActivity() {
 
                             }
 
+
                         }
 
                     })
                     recycler.layoutManager=layoutRecycler
                     recycler.adapter = adapter
 
-
-                   /* adapter.setOnItemClickListener(object : CustomAdapter.onItemClickListener{
-
-
-                        override fun onItemClick(position: Int) {
-                            var index = position
-                            delete.setOnClickListener {
-                              /*  list?.remove(list?.get(index))
-                                adapter.notifyItemRemoved(position)
-                                list?.let { it1 -> adapter.notifyItemRangeChanged(position, it1.size) }
-                                adapter.notifyDataSetChanged()*/
-
-
-                            }
-
-                        }
-
-                    })*/
                     Log.i("Success",response.body().toString())
                 }else{
                     Log.e("Error",response.message())

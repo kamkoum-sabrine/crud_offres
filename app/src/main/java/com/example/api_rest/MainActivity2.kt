@@ -33,37 +33,85 @@ class MainActivity2 : AppCompatActivity() {
 
         submit = findViewById(R.id.submit)
 
+        val getid = intent.getStringExtra("id")
+        val getintitule = intent.getStringExtra("intitule")
+        val getsociété = intent.getStringExtra("société")
+        val getspecialite = intent.getStringExtra("specialité")
+        val getpays = intent.getStringExtra("pays")
+        val getnbpostes = intent.getStringExtra("nbpostes")
+        if (getid!=null){
+            println("update")
+            intitule.setText(getintitule)
+            societe.setText(getsociété)
+            specialite.setText(getspecialite)
+            pays.setText(getpays)
+            nbPostes.setText(getnbpostes)
+            submit.setOnClickListener {
+                var newOffre: offre = offre()
+                newOffre.specialité = specialite.text.toString()
+                newOffre.société = societe.text.toString()
+                newOffre.nbpostes = nbPostes.text.toString().toInt()
+                newOffre.pays = pays.text.toString()
+                newOffre.intitulé = intitule.text.toString()
+                val scope = CoroutineScope(Dispatchers.Main)
+                scope.launch {
+                    try {
+                        val response = ApiClient.apiService.updateOffre(getid,newOffre)
+                        println(response)
+                           Toast.makeText(applicationContext,"Offre updated",Toast.LENGTH_SHORT).show()
+                        /*  pays.setText("")
+                          societe.setText("")
+                          specialite.setText("")
+                          nbPostes.setText("")
+                          intitule.setText("")*/
+
+                        intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
 
 
-
-
-        submit.setOnClickListener {
-            var newOffre: offre = offre()
-            newOffre.specialité = specialite.text.toString()
-            newOffre.société = societe.text.toString()
-            newOffre.nbpostes = nbPostes.text.toString().toInt()
-            newOffre.pays = pays.text.toString()
-            newOffre.intitulé = intitule.text.toString()
-            val scope = CoroutineScope(Dispatchers.Main)
-            scope.launch {
-                try {
-                    val response = ApiClient.apiService.createOffre(newOffre)
-                    println(response)
-                 //   Toast.makeText(applicationContext,"Offre created",Toast.LENGTH_SHORT).show()
-                  /*  pays.setText("")
-                    societe.setText("")
-                    specialite.setText("")
-                    nbPostes.setText("")
-                    intitule.setText("")*/
-
-                    intent = Intent(applicationContext, MainActivity::class.java)
-                    startActivity(intent)
-
-
-                } catch (e: Exception) {
-                    Log.e("Error", e.message.toString())
+                    } catch (e: Exception) {
+                        Log.e("Error", e.message.toString())
+                    }
                 }
+
+
             }
+
+        }
+        else {
+            println("add")
+            submit.setOnClickListener {
+                var newOffre: offre = offre()
+                newOffre.specialité = specialite.text.toString()
+                newOffre.société = societe.text.toString()
+                newOffre.nbpostes = nbPostes.text.toString().toInt()
+                newOffre.pays = pays.text.toString()
+                newOffre.intitulé = intitule.text.toString()
+                val scope = CoroutineScope(Dispatchers.Main)
+                scope.launch {
+                    try {
+                        val response = ApiClient.apiService.createOffre(newOffre)
+                        println(response)
+                        //   Toast.makeText(applicationContext,"Offre created",Toast.LENGTH_SHORT).show()
+                        /*  pays.setText("")
+                          societe.setText("")
+                          specialite.setText("")
+                          nbPostes.setText("")
+                          intitule.setText("")*/
+
+                        intent = Intent(applicationContext, MainActivity::class.java)
+                        startActivity(intent)
+
+
+                    } catch (e: Exception) {
+                        Log.e("Error", e.message.toString())
+                    }
+                }
+        }
+
+
+
+
 
 
         }
