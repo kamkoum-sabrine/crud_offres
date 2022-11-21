@@ -24,7 +24,7 @@ internal class CustomAdapter(private var data: MutableList<offre>?): RecyclerVie
         mListener = listener
     }
 
-    internal  inner class MyViewHolder (view : View) : RecyclerView.ViewHolder(view){
+    internal  inner class MyViewHolder (view : View, listener: onItemClickListener) : RecyclerView.ViewHolder(view){
         var code : TextView = view.findViewById(R.id.code)
         var intitule : TextView = view.findViewById(R.id.intitule)
         var specialite : TextView = view.findViewById(R.id.specialite)
@@ -32,14 +32,18 @@ internal class CustomAdapter(private var data: MutableList<offre>?): RecyclerVie
         var nbpostes : TextView = view.findViewById(R.id.nbpostes)
         var pays : TextView = view.findViewById(R.id.pays)
         var btn_delete : Button = view.findViewById(R.id.delete)
-
+        init {
+            view.setOnClickListener {
+                listener.onItemClick(adapterPosition)
+            }
+        }
 
 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.ligne,parent,false)
-        return MyViewHolder(itemView)
+        return MyViewHolder(itemView,mListener)
 
     }
 

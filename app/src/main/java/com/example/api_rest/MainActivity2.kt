@@ -49,13 +49,15 @@ class MainActivity2 : AppCompatActivity() {
                 try {
                     val response = ApiClient.apiService.createOffre(newOffre)
                     println(response)
-                    Toast.makeText(applicationContext,"Offre created",Toast.LENGTH_SHORT).show()
-                    pays.setText("")
+                 //   Toast.makeText(applicationContext,"Offre created",Toast.LENGTH_SHORT).show()
+                  /*  pays.setText("")
                     societe.setText("")
                     specialite.setText("")
                     nbPostes.setText("")
-                    intitule.setText("")
+                    intitule.setText("")*/
 
+                    intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
 
 
                 } catch (e: Exception) {
